@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
         VitePWA({
           registerType: 'autoUpdate',
           injectRegister: 'auto',
-          includeAssets: ['icons/logo-192.png', 'icons/logo-512.png', 'logo.png', 'favicon.ico', 'robots.txt'],
+          includeAssets: ['/icons/logo-192.png', '/icons/logo-512.png', '/logo.png', '/favicon.ico', '/robots.txt'],
           manifest: {
             name: 'Nexus Tools',
             short_name: 'Nexus',
