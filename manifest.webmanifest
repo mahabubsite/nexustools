@@ -1,0 +1,22 @@
+{
+  "name": "Nexus Tools",
+  "short_name": "Nexus",
+  "description": "High-performance online tools for builders and creators",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#2563EB",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/icons/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

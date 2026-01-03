@@ -83,7 +83,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             {/* Logo */}
             <div className="flex items-center">
               <Link to="/" className="flex-shrink-0 flex items-center gap-3 group">
-                <img src="/logo.png" alt="Nexus Tools" className="h-8 w-8 rounded-md object-contain shadow-lg" />
+                <div className="bg-brand-600 p-2 rounded-lg group-hover:bg-brand-500 transition-colors shadow-lg shadow-brand-500/20">
+                  <Command className="h-5 w-5 text-white" />
+                </div>
                 <span className="font-bold text-lg text-slate-900 dark:text-white tracking-tight">Nexus Tools</span>
               </Link>
               
@@ -221,7 +223,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div>
                <div className="flex items-center justify-center md:justify-start gap-2 mb-6">
-                <img src="/logo.png" alt="Nexus Tools" className="h-8 w-8 rounded-md object-contain" />
+                <div className="bg-brand-600 p-1.5 rounded-lg">
+                  <Command className="h-4 w-4 text-white" />
+                </div>
                 <span className="font-bold text-lg text-slate-900 dark:text-white">Nexus Tools</span>
               </div>
               <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 leading-relaxed">

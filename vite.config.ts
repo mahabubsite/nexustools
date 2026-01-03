@@ -14,7 +14,8 @@ export default defineConfig(({ mode }) => {
         react(),
         VitePWA({
           registerType: 'autoUpdate',
-          includeAssets: ['logo.png', 'favicon.ico', 'robots.txt'],
+          injectRegister: 'auto',
+          includeAssets: ['icons/logo-192.png', 'icons/logo-512.png', 'logo.png', 'favicon.ico', 'robots.txt'],
           manifest: {
             name: 'Nexus Tools',
             short_name: 'Nexus',
@@ -25,11 +26,12 @@ export default defineConfig(({ mode }) => {
             scope: '/',
             start_url: '/',
             icons: [
-              { src: '/logo.png', sizes: '192x192', type: 'image/png' },
-              { src: '/logo.png', sizes: '512x512', type: 'image/png' }
+              { src: '/icons/logo-192.png', sizes: '192x192', type: 'image/png' },
+              { src: '/icons/logo-512.png', sizes: '512x512', type: 'image/png' }
             ]
           },
           workbox: {
+            navigateFallback: '/index.html',
             runtimeCaching: [
               {
                 urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/,
@@ -53,19 +55,11 @@ export default defineConfig(({ mode }) => {
                     maxAgeSeconds: 24 * 60 * 60
                   }
                 }
-              },
-              {
-                urlPattern: /\//,
-                handler: 'NetworkFirst',
-                options: {
-                  cacheName: 'html-cache',
-                  expiration: {
-                    maxEntries: 10,
-                    maxAgeSeconds: 24 * 60 * 60
-                  }
-                }
               }
             ]
+          },
+          devOptions: {
+            enabled: false
           }
         })
       ],
