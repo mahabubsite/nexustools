@@ -1,0 +1,75 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- Helper Functions ---
+    
+    // Check if user is logged in
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if user is the specific admin email defined in AuthContext
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.email == 'mdmahbubsite@gmail.com';
+    }
+
+    // Check if the user is accessing their own data
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // --- Collection Rules ---
+
+    // Users: Owner can read/write own profile. Admin can manage all.
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Tools Status: Public read, Admin write
+    match /tools_status/{toolId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Blog Posts: Public read, Admin write
+    match /posts/{postId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Contact Messages: Public create, Admin read/write/update
+    match /messages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Reports: Public create, Admin read/update
+    match /reports/{reportId} {
+        allow create: if true;
+        allow read, update, delete: if isAdmin();
+    }
+
+    // Payment Requests: User create/read own. Admin read/manage all.
+    match /manual_payments/{paymentId} {
+      allow create: if isAuthenticated();
+      allow read: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // Site Configuration: Public read, Admin write
+    match /config/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Stats: Public write (view counting), Admin read
+    match /stats/{statId} {
+      allow read: if isAdmin();
+      allow write: if true;
+    }
+  }
+}
