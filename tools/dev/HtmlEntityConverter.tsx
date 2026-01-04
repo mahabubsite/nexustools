@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
 import { ArrowLeftRight } from 'lucide-react';
+import AdNative from '../../components/AdNative'; // 🔥 add this
 
 const HtmlEntityConverter: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
   const [input, setInput] = useState('');
@@ -24,7 +25,11 @@ const HtmlEntityConverter: React.FC<{ metadata: ToolMetadata }> = ({ metadata })
       <div className="p-6 space-y-4">
         <div className="flex justify-center mb-4">
             <button 
-                onClick={() => { setMode(mode === 'encode' ? 'decode' : 'encode'); process(input, mode === 'encode' ? 'decode' : 'encode'); }}
+                onClick={() => { 
+                    const newMode = mode === 'encode' ? 'decode' : 'encode';
+                    setMode(newMode); 
+                    process(input, newMode); 
+                }}
                 className="flex items-center gap-2 bg-brand-100 text-brand-700 px-4 py-2 rounded-full font-medium"
             >
                 <ArrowLeftRight className="h-4 w-4" /> Mode: {mode === 'encode' ? 'Encode' : 'Decode'}
@@ -44,6 +49,9 @@ const HtmlEntityConverter: React.FC<{ metadata: ToolMetadata }> = ({ metadata })
                 className="h-64 p-4 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none"
             />
         </div>
+
+        {/* 🔥 AD PLACE — AFTER RESULT */}
+        <AdNative />
       </div>
     </ToolTemplate>
   );
