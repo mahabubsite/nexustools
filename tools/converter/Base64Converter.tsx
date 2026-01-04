@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
 import { ArrowDownUp, Copy, Trash2, AlertCircle } from 'lucide-react';
+import AdNative from '../../components/AdNative'; // 🔥 add this
 
 const Base64Converter: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');
@@ -31,10 +32,8 @@ const Base64Converter: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => 
 
   const handleModeChange = (newMode: 'encode' | 'decode') => {
     setMode(newMode);
-    // Swap input/output if valid
     if (!error && output) {
         setInput(output);
-        // We need to trigger conversion immediately with swapped values
         if (newMode === 'encode') {
             try { setOutput(btoa(output)); } catch (e) { setOutput(''); }
         } else {
@@ -119,6 +118,9 @@ const Base64Converter: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => 
                 <Trash2 className="h-4 w-4" /> Clear All
             </button>
         </div>
+
+        {/* 🔥 AD PLACE — AFTER RESULT */}
+        <AdNative />
       </div>
     </ToolTemplate>
   );
