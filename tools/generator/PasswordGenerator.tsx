@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
-import { Copy, RefreshCw, ShieldCheck } from 'lucide-react';
+import AdNative from '../../components/AdNative';
+import { Copy, RefreshCw } from 'lucide-react';
 
 const PasswordGenerator: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
   const [password, setPassword] = useState('');
@@ -25,7 +26,7 @@ const PasswordGenerator: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) =
     if (options.numbers) chars += nums;
     if (options.symbols) chars += syms;
 
-    if (chars === '') return;
+    if (!chars) return;
 
     let pass = '';
     for (let i = 0; i < length; i++) {
@@ -36,87 +37,86 @@ const PasswordGenerator: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) =
 
   useEffect(() => {
     generate();
-  }, []); // Run once on mount
+  }, []);
 
   return (
     <ToolTemplate
       metadata={metadata}
-      howItWorks="Select your desired password length and character types (uppercase, numbers, etc.). The tool automatically generates a secure, random string locally in your browser."
+      howItWorks="Choose password length and character types. Passwords are generated securely in your browser and never stored."
     >
-      <div className="p-6">
-        <div className="relative mb-6">
+      <div className="p-6 space-y-8">
+
+        {/* PASSWORD DISPLAY */}
+        <div className="relative">
           <div className="bg-slate-100 p-5 rounded-lg border border-slate-200 break-all font-mono text-xl text-center text-slate-800 tracking-wider">
             {password}
           </div>
-          <button 
+          <button
             onClick={() => navigator.clipboard.writeText(password)}
-            className="absolute top-2 right-2 p-2 text-slate-400 hover:text-brand-600 bg-white/50 hover:bg-white rounded-md transition-colors"
+            className="absolute top-2 right-2 p-2 text-slate-400 hover:text-brand-600 bg-white/60 hover:bg-white rounded-md"
             title="Copy"
           >
             <Copy className="h-5 w-5" />
           </button>
         </div>
 
+        {/* 🔥 AD – AFTER PASSWORD */}
+        <AdNative />
+
+        {/* CONTROLS */}
         <div className="space-y-6">
           <div>
-             <div className="flex justify-between mb-2">
-                <label className="text-sm font-medium text-slate-700">Password Length: {length}</label>
-             </div>
-             <input 
-                type="range" 
-                min="6" 
-                max="64" 
-                value={length} 
-                onChange={(e) => setLength(parseInt(e.target.value))}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-600"
-             />
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Password Length: {length}
+            </label>
+            <input
+              type="range"
+              min="6"
+              max="64"
+              value={length}
+              onChange={(e) => setLength(parseInt(e.target.value))}
+              className="w-full h-2 bg-slate-200 rounded-lg cursor-pointer accent-brand-600"
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-             <label className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
-                <input 
-                  type="checkbox" 
-                  checked={options.uppercase} 
-                  onChange={(e) => setOptions({...options, uppercase: e.target.checked})}
-                  className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500"
+            {[
+              ['uppercase', 'Uppercase (A-Z)'],
+              ['lowercase', 'Lowercase (a-z)'],
+              ['numbers', 'Numbers (0-9)'],
+              ['symbols', 'Symbols (!@#)'],
+            ].map(([key, label]) => (
+              <label
+                key={key}
+                className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50"
+              >
+                <input
+                  type="checkbox"
+                  checked={(options as any)[key]}
+                  onChange={(e) =>
+                    setOptions({ ...options, [key]: e.target.checked })
+                  }
+                  className="w-4 h-4 text-brand-600 rounded"
                 />
-                <span className="text-slate-700 text-sm font-medium">Uppercase (A-Z)</span>
-             </label>
-             <label className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
-                <input 
-                  type="checkbox" 
-                  checked={options.lowercase} 
-                  onChange={(e) => setOptions({...options, lowercase: e.target.checked})}
-                  className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500"
-                />
-                <span className="text-slate-700 text-sm font-medium">Lowercase (a-z)</span>
-             </label>
-             <label className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
-                <input 
-                  type="checkbox" 
-                  checked={options.numbers} 
-                  onChange={(e) => setOptions({...options, numbers: e.target.checked})}
-                  className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500"
-                />
-                <span className="text-slate-700 text-sm font-medium">Numbers (0-9)</span>
-             </label>
-             <label className="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
-                <input 
-                  type="checkbox" 
-                  checked={options.symbols} 
-                  onChange={(e) => setOptions({...options, symbols: e.target.checked})}
-                  className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500"
-                />
-                <span className="text-slate-700 text-sm font-medium">Symbols (!@#)</span>
-             </label>
+                <span className="text-slate-700 text-sm font-medium">
+                  {label}
+                </span>
+              </label>
+            ))}
           </div>
 
-          <button 
+          {/* 🔥 AD – AFTER OPTIONS */}
+          <AdNative />
+
+          <button
             onClick={generate}
-            className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all shadow-md active:scale-95"
+            className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-md active:scale-95"
           >
             <RefreshCw className="h-5 w-5" /> Generate New Password
           </button>
+
+          {/* 🔥 AD – EXIT ZONE */}
+          <AdNative />
         </div>
       </div>
     </ToolTemplate>
