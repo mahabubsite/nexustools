@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
 import { ArrowLeftRight, Copy } from 'lucide-react';
+import AdNative from '../../components/AdNative'; // 🔥 add this
 
 const UrlEncoder: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
   const [input, setInput] = useState('');
@@ -53,7 +54,9 @@ const UrlEncoder: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
             <div>
                 <div className="flex justify-between mb-2">
                     <label className="block text-sm font-medium text-slate-700">Output</label>
-                    <button onClick={() => navigator.clipboard.writeText(output)} className="text-xs text-brand-600 hover:underline">Copy</button>
+                    <button onClick={() => navigator.clipboard.writeText(output)} className="text-xs text-brand-600 hover:underline flex items-center gap-1">
+                        <Copy className="h-3 w-3" /> Copy
+                    </button>
                 </div>
                 <textarea
                     readOnly
@@ -62,6 +65,9 @@ const UrlEncoder: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
                 />
             </div>
         </div>
+
+        {/* 🔥 AD PLACE — AFTER RESULT */}
+        <AdNative />
       </div>
     </ToolTemplate>
   );
