@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
 import { Copy, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
+import AdNative from '../../components/AdNative'; // 🔥 add this
 
 const JsonFormatter: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
   const [input, setInput] = useState('');
@@ -71,6 +72,9 @@ const JsonFormatter: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
              </div>
           )}
         </div>
+
+        {/* 🔥 AD PLACE — AFTER RESULT */}
+        <AdNative />
       </div>
     </ToolTemplate>
   );
