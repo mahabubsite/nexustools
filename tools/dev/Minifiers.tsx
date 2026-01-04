@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
 import { FileCode, ArrowDown } from 'lucide-react';
+import AdNative from '../../components/AdNative'; // 🔥 add this
 
 interface Props {
   metadata: ToolMetadata;
@@ -22,11 +23,9 @@ const Minifiers: React.FC<Props> = ({ metadata, subTool }) => {
     } else if (subTool === 'css') {
         res = res.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\s+/g, " ").replace(/\s*([{}:;,])\s*/g, "$1").replace(/;}/g, "}");
     } else {
-        // Very basic JS minification (safe removal of simple comments and whitespace)
-        // Note: Full JS minification in browser usually requires a heavy library like Terser. This is a lightweight approximation.
-        res = res.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*/g, ""); // Comments
-        res = res.replace(/\s+/g, " "); // Whitespace
-        res = res.replace(/\s*([=+\-*/{}();,])\s*/g, "$1"); // Space around operators
+        res = res.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*/g, "");
+        res = res.replace(/\s+/g, " ");
+        res = res.replace(/\s*([=+\-*/{}();,])\s*/g, "$1");
     }
 
     setOutput(res.trim());
@@ -69,6 +68,9 @@ const Minifiers: React.FC<Props> = ({ metadata, subTool }) => {
                 />
             </div>
         )}
+
+        {/* 🔥 AD PLACE — after result */}
+        <AdNative />
       </div>
     </ToolTemplate>
   );
