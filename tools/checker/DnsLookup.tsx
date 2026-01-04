@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
 import { Search } from 'lucide-react';
+import AdNative from '../../components/AdNative'; // 🔥 add this
 
 const DnsLookup: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
   const [domain, setDomain] = useState('');
@@ -14,7 +15,6 @@ const DnsLookup: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
     setLoading(true);
     setResults([]);
     try {
-        // Using Cloudflare DNS over HTTPS API
         const res = await fetch(`https://cloudflare-dns.com/dns-query?name=${domain}&type=${type}`, {
             headers: { 'accept': 'application/dns-json' }
         });
@@ -61,6 +61,7 @@ const DnsLookup: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
             </button>
         </div>
 
+        {/* RESULT TABLE */}
         <div className="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
             <table className="w-full text-sm text-left">
                 <thead className="bg-slate-100 text-slate-500 font-medium">
@@ -89,6 +90,9 @@ const DnsLookup: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
                 </tbody>
             </table>
         </div>
+
+        {/* 🔥 AD PLACE — AFTER RESULT */}
+        <AdNative />
       </div>
     </ToolTemplate>
   );
