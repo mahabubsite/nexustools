@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
-import AdNative from '../../components/AdNative';
 import { Download, Wifi, MessageCircle, Link as LinkIcon, Type, Box } from 'lucide-react';
 import QRCode from 'qrcode';
+import AdNative from '../../components/AdNative';
 
 type QRType = 'text' | 'url' | 'wifi' | 'whatsapp' | 'barcode';
 
 const QrCodeGenerator: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
   const [type, setType] = useState<QRType>('text');
+
   const [text, setText] = useState('https://example.com');
 
   const [ssid, setSsid] = useState('');
@@ -38,29 +39,37 @@ const QrCodeGenerator: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => 
 
     let rawData = '';
 
-    if (type === 'text' || type === 'url') rawData = text;
-    if (type === 'wifi') rawData = `WIFI:S:${ssid};T:${encryption};P:${password};;`;
-    if (type === 'whatsapp')
-      rawData = `https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+    switch (type) {
+      case 'text':
+      case 'url':
+        rawData = text;
+        break;
+      case 'wifi':
+        rawData = `WIFI:S:${ssid};T:${encryption};P:${password};;`;
+        break;
+      case 'whatsapp':
+        rawData = `https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+        break;
+    }
 
     if (!rawData) return;
 
     QRCode.toDataURL(rawData, {
       width: size,
       margin: 2,
-      color: { dark: colorDark, light: '#ffffff' },
+      color: { dark: colorDark, light: '#ffffff' }
     }).then(setDataUrl);
   };
 
   const generateBarcode = () => {
     const JsBarcode = (window as any).JsBarcode;
-    if (barcodeRef.current && JsBarcode) {
+    if (barcodeRef.current && text && JsBarcode) {
       JsBarcode(barcodeRef.current, text, {
         format: barcodeFormat,
         lineColor: colorDark,
         width: 2,
         height: 100,
-        displayValue: true,
+        displayValue: true
       });
       setDataUrl('');
     }
@@ -68,7 +77,6 @@ const QrCodeGenerator: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => 
 
   const download = () => {
     const link = document.createElement('a');
-
     if (type === 'barcode' && barcodeRef.current) {
       const svg = new XMLSerializer().serializeToString(barcodeRef.current);
       const blob = new Blob([svg], { type: 'image/svg+xml' });
@@ -78,13 +86,15 @@ const QrCodeGenerator: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => 
       link.href = dataUrl;
       link.download = 'qrcode.png';
     }
-
     link.click();
   };
 
   return (
     <ToolTemplate metadata={metadata}>
-      <div className="p-6 space-y-8">
+      <div className="p-6 space-y-10">
+
+        {/* 🔥 TOP AD */}
+        <AdNative />
 
         {/* TYPE SELECTOR */}
         <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
@@ -92,68 +102,70 @@ const QrCodeGenerator: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => 
           <TypeBtn active={type === 'url'} onClick={() => setType('url')} icon={LinkIcon} label="URL" />
           <TypeBtn active={type === 'wifi'} onClick={() => setType('wifi')} icon={Wifi} label="WiFi" />
           <TypeBtn active={type === 'whatsapp'} onClick={() => setType('whatsapp')} icon={MessageCircle} label="WhatsApp" />
-          <TypeBtn active={type === 'barcode'} onClick={() => { setType('barcode'); setText('12345678'); }} icon={Box} label="Barcode" />
+          <TypeBtn active={type === 'barcode'} onClick={() => setType('barcode')} icon={Box} label="Barcode" />
         </div>
-
-        {/* 🔥 AD – AFTER TYPE SELECT */}
-        <AdNative />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
           {/* INPUTS */}
           <div className="space-y-6">
-
             {(type === 'text' || type === 'url' || type === 'barcode') && (
               <input
-                type="text"
+                className="w-full p-3 border rounded-lg"
                 value={text}
-                onChange={(e) => setText(e.target.value)}
-                className="w-full p-3 border border-slate-300 rounded-lg"
+                onChange={e => setText(e.target.value)}
                 placeholder="Enter content"
               />
             )}
 
             {type === 'wifi' && (
               <>
-                <input className="w-full p-3 border rounded-lg" placeholder="SSID" value={ssid} onChange={(e) => setSsid(e.target.value)} />
-                <input className="w-full p-3 border rounded-lg" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <input className="w-full p-3 border rounded-lg" placeholder="SSID" value={ssid} onChange={e => setSsid(e.target.value)} />
+                <input className="w-full p-3 border rounded-lg" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+                <select className="w-full p-3 border rounded-lg" value={encryption} onChange={e => setEncryption(e.target.value)}>
+                  <option value="WPA">WPA/WPA2</option>
+                  <option value="WEP">WEP</option>
+                  <option value="nopass">None</option>
+                </select>
               </>
             )}
 
             {type === 'whatsapp' && (
               <>
-                <input className="w-full p-3 border rounded-lg" placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
-                <textarea className="w-full p-3 border rounded-lg" placeholder="Message" value={message} onChange={(e) => setMessage(e.target.value)} />
+                <input className="w-full p-3 border rounded-lg" placeholder="Phone" value={phone} onChange={e => setPhone(e.target.value)} />
+                <textarea className="w-full p-3 border rounded-lg" placeholder="Message" value={message} onChange={e => setMessage(e.target.value)} />
               </>
             )}
 
-            {/* 🔥 AD – AFTER INPUTS */}
-            <AdNative />
+            <div className="grid grid-cols-2 gap-4">
+              {type !== 'barcode' && (
+                <input type="number" className="p-2 border rounded-lg" value={size} onChange={e => setSize(+e.target.value)} />
+              )}
+              <input type="color" value={colorDark} onChange={e => setColorDark(e.target.value)} />
+            </div>
           </div>
 
           {/* PREVIEW */}
-          <div className="bg-slate-100 p-6 rounded-xl border text-center">
+          <div className="bg-slate-100 rounded-xl p-6 flex flex-col items-center justify-center">
 
-            {/* 🔥 AD – ABOVE PREVIEW */}
+            {/* 🔥 MIDDLE AD */}
             <AdNative />
 
             {type === 'barcode' ? (
-              <svg ref={barcodeRef}></svg>
+              <svg ref={barcodeRef} />
             ) : (
-              dataUrl && <img src={dataUrl} className="mx-auto mb-4" />
+              dataUrl && <img src={dataUrl} alt="QR" />
             )}
 
-            <button
-              onClick={download}
-              className="mt-4 bg-brand-600 text-white px-6 py-2 rounded-lg flex items-center gap-2 mx-auto"
-            >
+            <button onClick={download} className="mt-6 bg-brand-600 text-white px-6 py-2 rounded-lg flex items-center gap-2">
               <Download className="h-4 w-4" /> Download
             </button>
-
-            {/* 🔥 AD – AFTER DOWNLOAD */}
-            <AdNative />
           </div>
         </div>
+
+        {/* 🔥 BOTTOM AD */}
+        <AdNative />
+
       </div>
     </ToolTemplate>
   );
@@ -166,4 +178,8 @@ const TypeBtn = ({ active, onClick, icon: Icon, label }: any) => (
       active ? 'bg-brand-600 text-white' : 'bg-white border'
     }`}
   >
-    <Icon className="h-
+    <Icon className="h-4 w-4" /> {label}
+  </button>
+);
+
+export default QrCodeGenerator;
