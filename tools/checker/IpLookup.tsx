@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
 import { Globe, MapPin, Network } from 'lucide-react';
+import AdNative from '../../components/AdNative'; // 🔥 add this
 
 const IpLookup: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
   const [ip, setIp] = useState('');
@@ -14,7 +15,6 @@ const IpLookup: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
     setError('');
     setData(null);
     try {
-        // ipapi.co is free for limited usage and works client-side over HTTPS
         const res = await fetch(`https://ipapi.co/${targetIp}/json/`);
         if (!res.ok) throw new Error('Failed to fetch data');
         const json = await res.json();
@@ -55,6 +55,7 @@ const IpLookup: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
         {error && <div className="p-4 bg-red-50 text-red-600 rounded-lg">{error}</div>}
 
         {data && (
+            <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-bottom-2">
                 <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
                     <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
@@ -100,6 +101,10 @@ const IpLookup: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
                     </div>
                 </div>
             </div>
+
+            {/* 🔥 AD PLACE — AFTER DATA */}
+            <AdNative />
+            </>
         )}
       </div>
     </ToolTemplate>
