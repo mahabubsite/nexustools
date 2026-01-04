@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
 import { ArrowLeftRight } from 'lucide-react';
+import AdNative from '../../components/AdNative'; // 🔥 add this
 
 const BinaryConverter: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
   const [input, setInput] = useState('');
@@ -60,6 +61,9 @@ const BinaryConverter: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => 
                 />
             </div>
         </div>
+
+        {/* 🔥 AD PLACE — AFTER RESULT */}
+        <AdNative />
       </div>
     </ToolTemplate>
   );
