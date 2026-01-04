@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
+import AdNative from '../../components/AdNative'; // 🔥 add this
 
 const NumberToWords: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
   const [num, setNum] = useState<number | ''>('');
@@ -35,6 +36,9 @@ const NumberToWords: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
                 {num !== '' ? convert(Number(num)) : 'Waiting for input...'}
             </p>
         </div>
+
+        {/* 🔥 AD PLACE — AFTER RESULT */}
+        <AdNative />
       </div>
     </ToolTemplate>
   );
