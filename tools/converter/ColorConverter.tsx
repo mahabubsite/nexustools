@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ToolTemplate from '../../components/ToolTemplate';
 import { ToolMetadata } from '../../types';
+import AdNative from '../../components/AdNative'; // 🔥 add this
 
 const ColorConverter: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
   const [hex, setHex] = useState('#0ea5e9');
@@ -50,6 +51,9 @@ const ColorConverter: React.FC<{ metadata: ToolMetadata }> = ({ metadata }) => {
                 </div>
             </div>
         </div>
+
+        {/* 🔥 AD PLACE — AFTER RESULT */}
+        <AdNative />
       </div>
     </ToolTemplate>
   );
